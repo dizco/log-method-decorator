@@ -26,6 +26,16 @@ class DecoratedDummy {
         return arg;
     }
 
+    public callSyncPrivateMethod(delay: () => void, arg: number): number {
+        return this.decoratedSyncPrivateMethod(delay, arg);
+    }
+
+    @LogSyncMethod<MethodMetadata>({ normalDurationMs: normalMethodDurationMs })
+    private decoratedSyncPrivateMethod(delay: () => void, arg: number): number {
+        delay();
+        return arg;
+    }
+
     @LogSyncMethod<MethodMetadata>({ normalDurationMs: normalMethodDurationMs })
     public decoratedSyncMethod(delay: () => void, arg: number): number {
         delay();
@@ -34,6 +44,16 @@ class DecoratedDummy {
 
     @LogSyncMethod<{ potato: string }>({ potato: "" })
     public decoratedSyncMethodWithBadMetadata(arg: number): number {
+        return arg;
+    }
+
+    public callAsyncPrivateMethod(delay: Promise<void>, arg: number): Promise<number> {
+        return this.decoratedAsyncPrivateMethod(delay, arg);
+    }
+
+    @LogAsyncMethod<MethodMetadata>({ normalDurationMs: normalMethodDurationMs })
+    private async decoratedAsyncPrivateMethod(delay: Promise<void>, arg: number): Promise<number> {
+        await delay;
         return arg;
     }
 
@@ -112,6 +132,19 @@ describe("decorators", () => {
             expect(loggerSpy).toHaveBeenNthCalledWith(2, "[DecoratedDummy.decoratedSyncMethod] completed in 0ms");
         });
 
+        test("worksOnPrivateMethods", () => {
+            // Arrange
+            const loggerSpy = jest.spyOn(logger, "log");
+            const dummy = new DecoratedDummy(logger);
+
+            // Act
+            dummy.callSyncPrivateMethod(() => null, 3);
+
+            // Assert
+            expect(loggerSpy).toHaveBeenNthCalledWith(1, "[DecoratedDummy.decoratedSyncPrivateMethod] was invoked");
+            expect(loggerSpy).toHaveBeenNthCalledWith(2, "[DecoratedDummy.decoratedSyncPrivateMethod] completed in 0ms");
+        });
+
         test("withLongOperation_logsAppropriateDuration", async () => {
             // Arrange
             const loggerSpy = jest.spyOn(logger, "log");
@@ -178,6 +211,25 @@ describe("decorators", () => {
             // Assert
             expect(loggerSpy).toHaveBeenNthCalledWith(1, "[DecoratedDummy.decoratedAsyncMethod] was invoked");
             const logMatch = "\\[DecoratedDummy\\.decoratedAsyncMethod\\] completed in ([0-9])ms"; // Any number of ms between 0 and 9
+            expect(loggerSpy).toHaveBeenNthCalledWith(2, expect.stringMatching(logMatch));
+        });
+
+
+        test("worksOnPrivateMethods", async () => {
+            // Arrange
+            const loggerSpy = jest.spyOn(logger, "log");
+            const dummy = new DecoratedDummy(logger);
+
+            const promise = new Promise<void>((resolve) => {
+                resolve();
+            });
+
+            // Act
+            await dummy.callAsyncPrivateMethod(promise, 3);
+
+            // Assert
+            expect(loggerSpy).toHaveBeenNthCalledWith(1, "[DecoratedDummy.decoratedAsyncPrivateMethod] was invoked");
+            const logMatch = "\\[DecoratedDummy\\.decoratedAsyncPrivateMethod\\] completed in ([0-9])ms"; // Any number of ms between 0 and 9
             expect(loggerSpy).toHaveBeenNthCalledWith(2, expect.stringMatching(logMatch));
         });
 
