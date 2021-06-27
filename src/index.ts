@@ -1,2 +1,2 @@
-export { LogSyncMethod, LogAsyncMethod, LogClass, LogOptions } from "./lib/decorators";
+export { LogSyncMethod, LogAsyncMethod, LogClass, LogOptions, ExecutionTimeResult } from "./lib/decorators";
 
