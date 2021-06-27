@@ -1,8 +1,8 @@
 <h1 align="center" style="border-bottom: none;">log-method-decorator</h1>
 <h3 align="center">Easily log method calls in Typescript without boilerplate</h3>
 <p align="center">
-  <a href="https://travis-ci.com/dizco/react-scrollable-feed">
-    <img alt="Build Status" src="https://travis-ci.com/dizco/react-scrollable-feed.svg?branch=master">
+  <a href="https://travis-ci.com/dizco/log-method-decorator">
+    <img alt="Build Status" src="https://travis-ci.com/dizco/log-method-decorator.svg?branch=master">
   </a>
   <a href="https://www.npmjs.com/package/log-method-decorator">
     <img alt="NPM latest version" src="https://img.shields.io/npm/v/log-method-decorator/latest.svg">
@@ -119,7 +119,7 @@ Easy! Add the decorators on all the methods that you want to be logged :)
 We need the class decorator in order to have the class name available and to be able to type check the logger instance. Simple method decorators don't have access to the class scope. _log-method-decorator_ uses a logger from the class scope, rather than having to create a new logger.
 
 ### This package doesn't quite fit my needs...
-Please open an issue or a pull request where we can discuss your use case. Please keep in mind that this package will never be able to answer all the use cases. Feel free to star the repo :star: and copy the library code and adapt it to your needs.
+Please open a discussion, an issue or a pull request where we can discuss your use case. Please keep in mind that this package will never be able to answer all the use cases. Feel free to star the repo :star: and copy the library code and adapt it to your needs.
 
 ## For more details
 
