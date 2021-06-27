@@ -10,12 +10,15 @@
   "scripts": {
     "build": "tsc",
     "test": "jest ./dist --config=jest.config.js --verbose",
-    "lint": "./node_modules/.bin/eslint src/** --ext .js,.ts",
+    "lint": "eslint src/** --ext .js,.ts",
     "lint:watch": "esw --color --w \"./*(src|tests)/**/*.*(js|ts)\""
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "@types/node": "^15.12.5",
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
+    "eslint": "^7.29.0",
     "jest": "^27.0.5",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.4"

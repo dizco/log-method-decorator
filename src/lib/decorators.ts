@@ -33,8 +33,7 @@ export interface ExecutionTimeResult<T> {
  * @constructor
  */
 export function LogSyncMethod<TMetadata>(metadata: TMetadata): MethodDecorator {
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars
     return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
         target[SubMethods] = target[SubMethods] || new Map<string, MethodMetadata<TMetadata>>();
         // Add some information that class decorator will use
@@ -52,8 +51,7 @@ export function LogSyncMethod<TMetadata>(metadata: TMetadata): MethodDecorator {
  * @constructor
  */
 export function LogAsyncMethod<TMetadata>(metadata: TMetadata): MethodDecorator {
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars
     return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
         target[SubMethods] = target[SubMethods] || new Map<string, MethodMetadata<TMetadata>>();
         // Add some information that class decorator will use
@@ -66,7 +64,8 @@ export function LogAsyncMethod<TMetadata>(metadata: TMetadata): MethodDecorator 
 
 /**
  * Class decorator to allow some methods to be logged
- * To be used in conjunction with LogAsyncMethod
+ * To be used in conjunction with LogSyncMethod or LogAsyncMethod
+ * @see LogSyncMethod
  * @see LogAsyncMethod
  * @param className
  * @param logOptions
@@ -76,8 +75,7 @@ export function LogClass<TLogger, TMetadata>(className: string, logOptions: LogO
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function <T extends { new(...args: any[]): { readonly logger: TLogger } }>(Base: T): any {
         return class extends Base {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            constructor(...args: any[]) {
+            constructor(...args: any[]) { // eslint-disable-line @typescript-eslint/no-explicit-any
                 super(...args);
                 const subMethods: Map<string, MethodMetadata<TMetadata>> = Base.prototype[SubMethods];
                 if (subMethods) {
