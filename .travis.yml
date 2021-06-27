@@ -6,9 +6,7 @@ notifications:
   email: false
 node_js:
   - '16'
-  - '15'
   - '14'
-  - '13'
   - '12'
 script:
   - npm run lint
