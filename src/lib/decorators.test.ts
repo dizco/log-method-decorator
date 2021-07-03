@@ -64,6 +64,39 @@ class DecoratedDummy {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function BasicClassDecorator<T extends { new (...args: any[]): { myValue: string } }>(constructor: T) {
+    return class extends constructor {
+        myValue = "my value has been overridden by the class decorator";
+    };
+}
+function BasicMethodDecorator() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+
+        const originalMethod = descriptor.value;
+        descriptor.value = function (...args: unknown[]) {
+            console.log(`Method ${propertyKey} called!`);
+            return originalMethod.apply(this, args);
+        };
+    };
+}
+
+@BasicClassDecorator
+@LogClass<Logger, MethodMetadata>(MultipleDecoratorsDummy.name, logOptions)
+class MultipleDecoratorsDummy {
+    public myValue = "i am the default value";
+    constructor(public readonly logger: Logger) { }
+
+    @BasicMethodDecorator()
+    @LogSyncMethod<MethodMetadata>({ normalDurationMs: normalMethodDurationMs })
+    public myMethod(): void {
+        //
+    }
+}
+
+// TODO: Add tests with other method and class decorators
+
 describe("decorators", () => {
     const timeouts: NodeJS.Timeout[] = [];
     let logger: Logger;
@@ -251,6 +284,33 @@ describe("decorators", () => {
             expect(loggerSpy).toHaveBeenNthCalledWith(1, "[DecoratedDummy.decoratedAsyncMethod] was invoked");
             const abnormalLogMatch = "\\[DecoratedDummy\\.decoratedAsyncMethod\\] completed in ([1-9][0-9]+)ms"; // Any number of ms 10 or above
             expect(loggerSpy).toHaveBeenNthCalledWith(2, expect.stringMatching(abnormalLogMatch));
+        });
+    });
+
+    describe("multipleDecorators", () => {
+        test("doesntInterfere", () => {
+            // Arrange
+            const consoleSpy = jest.spyOn(console, "log");
+            const dummy = new MultipleDecoratorsDummy(logger);
+
+            // Act
+            dummy.myMethod();
+
+            // Assert
+            expect(dummy.myValue).toBe("my value has been overridden by the class decorator");
+            expect(consoleSpy).toHaveBeenNthCalledWith(1, "Method myMethod called!");
+        });
+
+        test("logs", () => {
+            // Arrange
+            const loggerSpy = jest.spyOn(logger, "log");
+            const dummy = new MultipleDecoratorsDummy(logger);
+
+            // Act
+            dummy.myMethod();
+
+            // Assert
+            expect(loggerSpy).toHaveBeenCalledWith(1, "");
         });
     });
 });
