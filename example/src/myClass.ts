@@ -1,4 +1,4 @@
-import { LogAsyncMethod, LogClass, LogSyncMethod } from '../../dist';
+import { LogAsyncMethod, LogClass, LogSyncMethod } from 'log-method-decorator';
 import { Logger } from './logger';
 import { Metadata, LoggingOptions } from './loggingOptions';
 
