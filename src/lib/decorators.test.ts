@@ -73,7 +73,6 @@ function BasicClassDecorator<T extends { new (...args: any[]): { myValue: string
 function BasicMethodDecorator() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-
         const originalMethod = descriptor.value;
         descriptor.value = function (...args: unknown[]) {
             console.log(`Method ${propertyKey} called!`);
