@@ -4,13 +4,13 @@
 
 Local development is broken into two parts (ideally using two tabs).
 
-First, run the compiler to watch your `src/` module and automatically recompile it into `dist/` whenever you make changes.
+First, run the compiler to watch the `src/` module and automatically recompile it into `dist/` whenever you make changes.
 
 ```bash
 npm run build -- --watch
 ```
 
-The second part will be running the `example/` that's linked to the local version of your module.
+The second part will be running the `example/` that's linked to the local version of the module.
 
 ```bash
 # (in another tab)
@@ -21,7 +21,9 @@ npm run sample
 
 ### Linting
 
-Not available yet.
+```bash
+npm run lint
+```
 
 ### Testing :heart_eyes:
 
@@ -29,12 +31,12 @@ Not available yet.
 npm run test
 ```
 
-### Publishing to npm :rocket:
+### Publishing to npm (admins only) :rocket:
 
 ```bash
 npm publish
 ```
 
-This builds `cjs` and `es` versions of your module to `dist/` and then publishes your module to `npm`.
+This builds the module to `dist/` and then publishes to `npm`.
 
 Make sure that any npm modules you want as peer dependencies are properly marked as `peerDependencies` in `package.json`. The rollup config will automatically recognize them as peers and not try to bundle them in your module.
