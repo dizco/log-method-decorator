@@ -33,11 +33,15 @@ export interface ExecutionTimeResult<T> {
  * @constructor
  */
 export function LogSyncMethod<TMetadata>(metadata: TMetadata): MethodDecorator {
+    return LogSyncMethodForSymbol(metadata, SubMethods);
+}
+
+export function LogSyncMethodForSymbol<TMetadata>(metadata: TMetadata, methodsSymbol: symbol): MethodDecorator {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars
     return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
-        target[SubMethods] = target[SubMethods] || new Map<string, MethodMetadata<TMetadata>>();
+        target[methodsSymbol] = target[methodsSymbol] || new Map<string, MethodMetadata<TMetadata>>();
         // Add some information that class decorator will use
-        (target[SubMethods] as Map<string, MethodMetadata<TMetadata>>).set(propertyKey.toString(), {
+        (target[methodsSymbol] as Map<string, MethodMetadata<TMetadata>>).set(propertyKey.toString(), {
             metadata,
             isAsync: false,
         });
@@ -51,11 +55,15 @@ export function LogSyncMethod<TMetadata>(metadata: TMetadata): MethodDecorator {
  * @constructor
  */
 export function LogAsyncMethod<TMetadata>(metadata: TMetadata): MethodDecorator {
+    return LogAsyncMethodForSymbol(metadata, SubMethods);
+}
+
+export function LogAsyncMethodForSymbol<TMetadata>(metadata: TMetadata, methodsSymbol: symbol): MethodDecorator {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars
     return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
-        target[SubMethods] = target[SubMethods] || new Map<string, MethodMetadata<TMetadata>>();
+        target[methodsSymbol] = target[methodsSymbol] || new Map<string, MethodMetadata<TMetadata>>();
         // Add some information that class decorator will use
-        (target[SubMethods] as Map<string, MethodMetadata<TMetadata>>).set(propertyKey.toString(), {
+        (target[methodsSymbol] as Map<string, MethodMetadata<TMetadata>>).set(propertyKey.toString(), {
             metadata,
             isAsync: true,
         });
@@ -71,13 +79,20 @@ export function LogAsyncMethod<TMetadata>(metadata: TMetadata): MethodDecorator 
  * @param logOptions
  * @constructor
  */
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function LogClass<TLogger, TMetadata>(className: string, logOptions: LogOptions<TLogger, TMetadata>) {
+    return LogClassForSymbol(className, logOptions, SubMethods);
+}
+
+export function LogClassForSymbol<TLogger, TMetadata>(className: string, logOptions: LogOptions<TLogger, TMetadata>, methodsSymbol: symbol) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function <T extends { new(...args: any[]): { readonly logger: TLogger } }>(Base: T): any {
         return class extends Base {
             constructor(...args: any[]) { // eslint-disable-line @typescript-eslint/no-explicit-any
                 super(...args);
-                const subMethods: Map<string, MethodMetadata<TMetadata>> = Base.prototype[SubMethods];
+                console.log("Object prototype", className, methodsSymbol, Base.prototype);
+                const subMethods: Map<string, MethodMetadata<TMetadata>> = Base.prototype[methodsSymbol];
+                console.log("Object prototype", Base.prototype);
                 if (subMethods) {
                     const logger = this.logger;
 

@@ -18,9 +18,7 @@ export abstract class LoggingOptions {
     }
 
     public static readonly AbnormalExecutionTimeLog: LogOptions<Logger, NormalExecutionMetadata> = {
-        onMethodStart: ((logger, method) => {
-            logger.log(`[${method.className}.${method.methodName}] was invoked`);
-        }),
+        onMethodStart: ((logger, method) => {}),
         onMethodEnd: ((logger, method, executionTimeResult) => {
             if (executionTimeResult.executionTimeMs > method.metadata.normalExecutionTimeMs) {
                 logger.log(`WARNING: [${method.className}.${method.methodName}] completed in ${executionTimeResult.executionTimeMs}ms, which exceeds normal execution time of ${method.metadata.normalExecutionTimeMs}ms`);
@@ -29,14 +27,10 @@ export abstract class LoggingOptions {
         }),
     }
 
-    public static readonly Screenshot: LogOptions<Logger, Metadata> = {
+    public static readonly InvokationLog: LogOptions<Logger, Metadata> = {
         onMethodStart: ((logger, method) => {
-            // logger.log(`[${method.className}.${method.methodName}] was invoked`);
-            // TODO: Take screenshot
+            logger.log(`[${method.className}.${method.methodName}] was invoked`);
         }),
-        onMethodEnd: ((logger, method, executionTimeResult) => {
-            // logger.log(`[${method.className}.${method.methodName}] completed in ${executionTimeResult.executionTimeMs}ms`);
-            // TODO: Take screenshot
-        }),
+        onMethodEnd: ((logger, method, executionTimeResult) => {}),
     }
 }
