@@ -310,7 +310,9 @@ describe("decorators", () => {
             dummy.myMethod();
 
             // Assert
-            expect(loggerSpy).toHaveBeenCalledWith(1, "");
+            expect(loggerSpy).toHaveBeenNthCalledWith(1, "[MultipleDecoratorsDummy.myMethod] was invoked");
+            const logMatch = "\\[MultipleDecoratorsDummy\\.myMethod\\] completed in ([0-9])ms"; // Any number of ms between 0 and 9
+            expect(loggerSpy).toHaveBeenNthCalledWith(2, expect.stringMatching(logMatch));
         });
     });
 });
