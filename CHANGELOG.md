@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.0.3](https://github.com/dizco/log-method-decorator/compare/v1.0.2...v1.0.3) (2025-10-15)
+
+
+### Bug Fixes
+
+* Fallback to date if perf_hooks are not available ([#17](https://github.com/dizco/log-method-decorator/issues/17)) ([bf9f44c](https://github.com/dizco/log-method-decorator/commit/bf9f44c1c22854f98c5315f0281cda2cf28ad2be))
+
 ## [1.0.2](https://github.com/dizco/log-method-decorator/compare/v1.0.1...v1.0.2) (2025-10-15)
 
 
