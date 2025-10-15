@@ -1,4 +1,26 @@
-import { performance } from "perf_hooks";
+// Conditional import of perf_hooks for cross-platform compatibility
+// We need to use require here because:
+// 1. Dynamic import() is async and we need synchronous access
+// 2. perf_hooks is Node.js-only and may not exist in other environments (React Native, browsers)
+// 3. We need graceful fallback to Date.now() when perf_hooks is unavailable
+let performance: { now(): number } | undefined;
+
+try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    performance = require("perf_hooks").performance;
+} catch (error) {
+    // Fallback for React Native and other environments where perf_hooks is not available
+    performance = undefined;
+}
+
+// Performance timing utility with fallback
+function getTimestamp(): number {
+    if (performance) {
+        return performance.now();
+    }
+    // Fallback to Date.now() for React Native/other environments
+    return Date.now();
+}
 
 const SubMethods = Symbol("SubMethods"); // just to be sure there won't be collisions
 
@@ -121,12 +143,12 @@ function trackSyncStep<TResult, TLogger, TMetadata>(step: () => TResult, logger:
 
     logOptions.onMethodStart(logger, methodDescriptor);
 
-    const start = performance.now();
+    const start = getTimestamp();
     const startDate = new Date();
 
     const result = step();
 
-    const end = performance.now();
+    const end = getTimestamp();
     const executionTimeMs = Math.floor(end - start);
 
     const executionTimeResult: ExecutionTimeResult<TResult> = {
@@ -145,12 +167,12 @@ async function trackAsyncStep<TResult, TLogger, TMetadata>(step: Promise<TResult
 
     logOptions.onMethodStart(logger, methodDescriptor);
 
-    const start = performance.now();
+    const start = getTimestamp();
     const startDate = new Date();
 
     const result = await step;
 
-    const end = performance.now();
+    const end = getTimestamp();
     const executionTimeMs = Math.floor(end - start);
 
     const executionTimeResult: ExecutionTimeResult<TResult> = {
