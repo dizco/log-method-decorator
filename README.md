@@ -1,25 +1,17 @@
 <h1 align="center" style="border-bottom: none;">log-method-decorator</h1>
 <h3 align="center">Easily log method calls in Typescript without boilerplate</h3>
 <p align="center">
-  <a href="https://travis-ci.com/dizco/log-method-decorator">
-    <img alt="Build Status" src="https://travis-ci.com/dizco/log-method-decorator.svg?branch=master">
+  <a href="https://github.com/dizco/log-method-decorator/actions/workflows/ci.yml">
+    <img alt="CI" src="https://github.com/dizco/log-method-decorator/actions/workflows/ci.yml/badge.svg">
+  </a>
+  <a href="https://github.com/dizco/log-method-decorator/actions/workflows/npm-publish.yml">
+    <img alt="Publish to NPM" src="https://github.com/dizco/log-method-decorator/actions/workflows/npm-publish.yml/badge.svg">
   </a>
   <a href="https://www.npmjs.com/package/log-method-decorator">
     <img alt="NPM latest version" src="https://img.shields.io/npm/v/log-method-decorator/latest.svg">
   </a>
   <a href="http://makeapullrequest.com">
     <img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square">
-  </a>
-</p>
-<p align="center">
-  <a href="https://david-dm.org/dizco/log-method-decorator">
-    <img alt="dependencies Status" src="https://david-dm.org/dizco/log-method-decorator/status.svg">
-  </a>
-  <a href="https://david-dm.org/dizco/log-method-decorator?type=peer">
-    <img alt="peerDependencies Status" src="https://david-dm.org/dizco/log-method-decorator/peer-status.svg">
-  </a>
-  <a href="https://david-dm.org/dizco/log-method-decorator?type=dev">
-    <img alt="devDependencies Status" src="https://david-dm.org/dizco/log-method-decorator/dev-status.svg">
   </a>
 </p>
 
