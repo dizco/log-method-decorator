@@ -1,4 +1,5 @@
 import { performance } from "perf_hooks";
+import "reflect-metadata";
 
 const SubMethods = Symbol("SubMethods"); // just to be sure there won't be collisions
 
@@ -90,9 +91,9 @@ export function LogClassForSymbol<TLogger, TMetadata>(className: string, logOpti
         return class extends Base {
             constructor(...args: any[]) { // eslint-disable-line @typescript-eslint/no-explicit-any
                 super(...args);
-                console.log("Object prototype", className, methodsSymbol, Base.prototype);
+                //console.log("Object prototype", className, methodsSymbol, Base.prototype);
                 const subMethods: Map<string, MethodMetadata<TMetadata>> = Base.prototype[methodsSymbol];
-                console.log("Object prototype", Base.prototype);
+                //console.log("Object prototype", Base.prototype);
                 if (subMethods) {
                     const logger = this.logger;
 
@@ -111,6 +112,11 @@ export function LogClassForSymbol<TLogger, TMetadata>(className: string, logOpti
                         };
 
                         const originalMethod = descriptor.value;
+                        const originalMetadata: any = {} // eslint-disable-line @typescript-eslint/no-explicit-any
+                        for (const key of Reflect.getMetadataKeys(originalMethod)) {
+                            originalMetadata[key] = Reflect.getMetadata(key, originalMethod);
+                        }
+
                         if (metadata.isAsync) {
                             descriptor.value = async function (...args: unknown[]) {
                                 return trackAsyncStep(originalMethod.apply(this, args), logger, logOptions, methodDescriptor);
@@ -120,6 +126,11 @@ export function LogClassForSymbol<TLogger, TMetadata>(className: string, logOpti
                             descriptor.value = function (...args: unknown[]) {
                                 return trackSyncStep(() => originalMethod.apply(this, args), logger, logOptions, methodDescriptor);
                             };
+                        }
+
+                        // Copy the original metadata on the new method
+                        for (const key of Object.keys(metadata)) {
+                            Reflect.defineMetadata(key, originalMetadata[key], descriptor.value);
                         }
 
                         // Wrap the original method with our step tracker
