@@ -259,14 +259,12 @@ describe("decorators", () => {
         const originalRequire = require;
         beforeEach(() => {
             // Create a mock require that throws for perf_hooks
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const mockRequire = jest.fn((moduleName: string) => {
                 if (moduleName === 'perf_hooks') {
                     throw new Error('Module not found: perf_hooks');
                 }
                 return originalRequire(moduleName);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            }) as any;
+            }) as unknown as typeof require;
             // Store it if needed for future use
             global.require = mockRequire;
         });
@@ -283,7 +281,7 @@ describe("decorators", () => {
             expect(() => {
                 // Re-importing should work since the module is already loaded with perf_hooks available
                 // This test documents the expected behavior rather than testing the exact fallback
-                // eslint-disable-next-line @typescript-eslint/no-var-requires
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
                 const decoratorsModule = require('./decorators');
                 expect(decoratorsModule.LogClass).toBeDefined();
                 expect(decoratorsModule.LogSyncMethod).toBeDefined();
