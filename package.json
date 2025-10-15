@@ -11,7 +11,7 @@
     "build": "tsc",
     "prepare": "npm run build",
     "test": "jest ./dist --config=jest.config.js --verbose",
-    "lint": "eslint src/** --ext .js,.ts",
+    "lint": "eslint .",
     "lint:watch": "esw --color --w \"./*(src|tests)/**/*.*(js|ts)\""
   },
   "devDependencies": {
