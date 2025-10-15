@@ -265,6 +265,7 @@ describe("decorators", () => {
                     throw new Error('Module not found: perf_hooks');
                 }
                 return originalRequire(moduleName);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             }) as any;
             // Store it if needed for future use
             global.require = mockRequire;
