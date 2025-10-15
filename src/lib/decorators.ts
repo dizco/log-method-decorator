@@ -6,9 +6,9 @@
 let performance: { now(): number } | undefined;
 
 try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     performance = require("perf_hooks").performance;
-} catch (error) {
+} catch {
     // Fallback for React Native and other environments where perf_hooks is not available
     performance = undefined;
 }
