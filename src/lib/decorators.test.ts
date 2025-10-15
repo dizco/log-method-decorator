@@ -257,16 +257,17 @@ describe("decorators", () => {
     describe("cross-platform compatibility", () => {
         // Store original require function
         const originalRequire = require;
-        let mockRequire: typeof require;
-
         beforeEach(() => {
             // Create a mock require that throws for perf_hooks
-            mockRequire = jest.fn((moduleName: string) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const mockRequire = jest.fn((moduleName: string) => {
                 if (moduleName === 'perf_hooks') {
                     throw new Error('Module not found: perf_hooks');
                 }
                 return originalRequire(moduleName);
             }) as any;
+            // Store it if needed for future use
+            global.require = mockRequire;
         });
 
         afterEach(() => {
@@ -281,6 +282,7 @@ describe("decorators", () => {
             expect(() => {
                 // Re-importing should work since the module is already loaded with perf_hooks available
                 // This test documents the expected behavior rather than testing the exact fallback
+                // eslint-disable-next-line @typescript-eslint/no-var-requires
                 const decoratorsModule = require('./decorators');
                 expect(decoratorsModule.LogClass).toBeDefined();
                 expect(decoratorsModule.LogSyncMethod).toBeDefined();
@@ -356,9 +358,11 @@ describe("decorators", () => {
             // even when using Date.now() fallback
             
             // Arrange
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             let capturedExecutionTimeResult: any = null;
             const customLogOptions = {
                 onMethodStart: jest.fn(),
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onMethodEnd: jest.fn((logger: any, method: any, executionTimeResult: any) => {
                     capturedExecutionTimeResult = executionTimeResult;
                 })
