@@ -14,18 +14,35 @@ const compat = new FlatCompat({
     allConfig: js.configs.all
 });
 
-export default defineConfig([globalIgnores(["**/node_modules", "**/dist", "**/example"]), {
-    extends: compat.extends(
-        "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-    ),
+export default defineConfig([
+    globalIgnores(["**/node_modules", "**/dist", "**/example"]),
+    {
+        extends: compat.extends(
+            "eslint:recommended",
+            "plugin:@typescript-eslint/eslint-recommended",
+            "plugin:@typescript-eslint/recommended",
+        ),
 
-    plugins: {
-        "@typescript-eslint": typescriptEslint,
-    },
+        plugins: {
+            "@typescript-eslint": typescriptEslint,
+        },
 
-    languageOptions: {
-        parser: tsParser,
+        languageOptions: {
+            parser: tsParser,
+        },
     },
-}]);
+    // Config files that use CommonJS
+    {
+        files: ["*.config.js", "*.config.cjs"],
+        languageOptions: {
+            globals: {
+                module: "readonly",
+                require: "readonly",
+                __dirname: "readonly",
+                __filename: "readonly",
+                exports: "readonly",
+                process: "readonly",
+            },
+        },
+    },
+]);
